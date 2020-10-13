@@ -1,4 +1,4 @@
-package com.dnovac.sandbox.config.kafka;
+package com.dnovac.customers.config.kafka;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;

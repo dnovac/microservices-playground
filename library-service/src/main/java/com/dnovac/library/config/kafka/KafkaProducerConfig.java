@@ -1,4 +1,4 @@
-package com.dnovac.sandbox.config.kafka;
+package com.dnovac.library.config.kafka;
 
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;

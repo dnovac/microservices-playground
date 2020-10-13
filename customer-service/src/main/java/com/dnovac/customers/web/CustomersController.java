@@ -1,6 +1,5 @@
-package com.dnovac.sandbox.controller;
+package com.dnovac.customers.web;
 
-import com.dnovac.sandbox.engine.CustomersProducer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,15 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("customers")
 public class CustomersController {
-
-  private final CustomersProducer producer;
-
-  @PostMapping("publish")
-  public void sendMessage(@RequestParam("message") String message) {
-    producer.sendMessage(message);
-  }
-
-
 
 
 }

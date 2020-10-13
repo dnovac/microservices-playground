@@ -1,4 +1,4 @@
-package com.dnovac.sandbox.config.kafka;
+package com.dnovac.library.config.kafka;
 
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.NewTopic;
@@ -21,8 +21,8 @@ public class KafkaTopicConfig {
   @Value(value = "${spring.kafka.topic.bootstrap-servers}")
   private String bootstrapAddress;
 
-  @Value(value = "${spring.kafka.topic.customers-topic-name}")
-  private String customersTopicName;
+  @Value(value = "${spring.kafka.topic.library-topic-name}")
+  private String libraryTopicName;
 
 
   @Bean
@@ -33,8 +33,8 @@ public class KafkaTopicConfig {
   }
 
   @Bean
-  public NewTopic topic1() {
-    return new NewTopic(customersTopicName, 1, (short) 1);
+  public NewTopic libraryTopic() {
+    return new NewTopic(libraryTopicName, 1, (short) 1);
   }
 
 

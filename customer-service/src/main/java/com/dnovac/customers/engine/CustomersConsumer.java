@@ -1,4 +1,4 @@
-package com.dnovac.sandbox.engine;
+package com.dnovac.customers.engine;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -23,10 +23,10 @@ public class CustomersConsumer {
    * @param message
    * @throws IOException
    */
-  @KafkaListener(topics = "customersTopic", groupId = "group_id")
+  @KafkaListener(topics = "libraryTopic", groupId = "group_id")
   public void consume(String message) throws IOException {
 
-    log.info(String.format("#### -> Consumed message -> %s", message));
+    log.info(String.format("[ Customers-Service ] -> Consumed message -> %s", message));
   }
 
 }

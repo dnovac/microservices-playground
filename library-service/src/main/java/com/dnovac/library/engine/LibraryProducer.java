@@ -1,33 +1,37 @@
-package com.dnovac.sandbox.engine;
+package com.dnovac.library.engine;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.admin.NewTopic;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
-import java.util.concurrent.CompletableFuture;
-
 
 /**
- * @author Dan Novac on 09/10/2020
- * @project sandbox
+ * @author Dan Novac on 13/10/2020
+ * @project microservices-playground
  */
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class CustomersProducer {
-
-  private static final String TOPIC = "customersTopic";
+public class LibraryProducer {
 
   private final KafkaTemplate<String, String> kafkaTemplate;
 
+  private final NewTopic libraryTopic;
+
+  /**
+   * @param message
+   */
   public void sendMessage(String message) {
 
-    log.info(String.format("#### -> Producing message -> %s", message));
-    ListenableFuture<SendResult<String, String>> future = kafkaTemplate.send(TOPIC, message);
+    log.info(String.format("[Library-Service] -> Producing message -> %s on topic: %s", message, libraryTopic.name()));
+    ListenableFuture<SendResult<String, String>> future = kafkaTemplate.send(libraryTopic.name(), message);
 
     ListenableFutureCallback<SendResult<String, String>> listenableFutureCallback = getListenableFutureCallback(message);
     future.addCallback(listenableFutureCallback);
