@@ -11,10 +11,12 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  * @project microservices-playground
  */
 @EnableDiscoveryClient
-@SpringBootApplication
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 public class LibraryServiceApplication {
 
   public static void main(String[] args) {
+
     SpringApplication.run(LibraryServiceApplication.class, args);
   }
+
 }
