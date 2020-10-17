@@ -1,1 +1,32 @@
+server:
+  port: 8762
+
+spring:
+  application:
+    name: zuul-gateway-service
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+zuul:
+  #ignored services helps to have only the defined routes. by default we'd had /library-service etc. all the services registered in eureka
+  ignoredServices: "*"
+  #localhost:zuul_port/actuator/routes
+  routes:
+    library-service: /library/**
+    customer-service: /customers/**
+
+
 

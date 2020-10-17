@@ -29,6 +29,7 @@ public class KafkaProducerConfig {
   @Bean
   public ProducerFactory<String, Book> bookProducerFactory() {
 
+    JsonSerializer<Book> bookJsonSerializer = new JsonSerializer<>();
     Map<String, Object> configProps = new HashMap<>();
     configProps.put(
             ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
@@ -38,8 +39,8 @@ public class KafkaProducerConfig {
             StringSerializer.class);
     configProps.put(
             ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
-            new JsonSerializer<Book>()) ;
-    return new DefaultKafkaProducerFactory<>(configProps);
+           bookJsonSerializer);
+    return new DefaultKafkaProducerFactory<>(configProps, new StringSerializer(), bookJsonSerializer);
   }
 
   @Bean
