@@ -21,12 +21,4 @@ import java.util.List;
 @RequestMapping("customers")
 public class CustomersController {
 
-  private final DiscoveryClient discoveryClient;
-
-  @RequestMapping("/service-instances/{applicationName}")
-  public List<ServiceInstance> serviceInstancesByApplicationName(
-          @PathVariable String applicationName) {
-    return this.discoveryClient.getInstances(applicationName);
-  }
-
 }

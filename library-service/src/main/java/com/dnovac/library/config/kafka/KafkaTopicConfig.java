@@ -21,20 +21,21 @@ public class KafkaTopicConfig {
   @Value(value = "${spring.kafka.topic.bootstrap-servers}")
   private String bootstrapAddress;
 
-  @Value(value = "${spring.kafka.topic.library-topic-name}")
-  private String libraryTopicName;
+  @Value(value = "${spring.kafka.topic.book-topic-name}")
+  private String bookTopicName;
 
 
   @Bean
   public KafkaAdmin kafkaAdmin() {
     Map<String, Object> configs = new HashMap<>();
     configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
+
     return new KafkaAdmin(configs);
   }
 
   @Bean
-  public NewTopic libraryTopic() {
-    return new NewTopic(libraryTopicName, 1, (short) 1);
+  public NewTopic bookTopic() {
+    return new NewTopic(bookTopicName, 1, (short) 1);
   }
 
 

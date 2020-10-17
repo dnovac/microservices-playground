@@ -1,6 +1,9 @@
 package com.dnovac.customers.config.kafka;
 
+import com.dnovac.customers.config.deserializer.BookDeserializer;
+import com.dnovac.customers.web.domain.Book;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.common.serialization.ByteArrayDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -9,6 +12,7 @@ import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
+import org.springframework.kafka.support.serializer.JsonDeserializer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +33,12 @@ public class KafkaConsumerConfig {
   private String groupId;
 
   @Bean
-  public ConsumerFactory<String, String> consumerFactory() {
+  public ConsumerFactory<String, Book> bookConsumerFactory() {
+
+    JsonDeserializer<Book> deserializer = new JsonDeserializer<>(Book.class);
+    deserializer.setRemoveTypeHeaders(false);
+    deserializer.addTrustedPackages("com.dnovac.customers.web.domain");
+    deserializer.setUseTypeMapperForKey(true);
 
     Map<String, Object> props = new HashMap<>();
     props.put(
@@ -41,32 +50,34 @@ public class KafkaConsumerConfig {
     props.put(
             ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
             StringDeserializer.class);
-    props.put(
-            ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
-            StringDeserializer.class);
+    props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
+            deserializer);
 
-    return new DefaultKafkaConsumerFactory<>(props);
+    return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), deserializer);
   }
 
   @Bean
-  public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactory() {
+  public ConcurrentKafkaListenerContainerFactory<String, Book> bookKafkaListenerContainerFactory() {
 
-    ConcurrentKafkaListenerContainerFactory<String, String> factory =
+    ConcurrentKafkaListenerContainerFactory<String, Book> factory =
             new ConcurrentKafkaListenerContainerFactory<>();
-    factory.setConsumerFactory(consumerFactory());
-
+    factory.setConsumerFactory(bookConsumerFactory());
     return factory;
   }
 
+  /**
+   * A filter just for example
+   *
+   * @return ConcurrentKafkaListenerContainerFactory
+   */
   @Bean
-  public ConcurrentKafkaListenerContainerFactory<String, String>
-  filterKafkaListenerContainerFactory() {
+  public ConcurrentKafkaListenerContainerFactory<String, Book> filterKafkaListenerContainerFactory() {
 
-    ConcurrentKafkaListenerContainerFactory<String, String> factory =
+    ConcurrentKafkaListenerContainerFactory<String, Book> factory =
             new ConcurrentKafkaListenerContainerFactory<>();
-    factory.setConsumerFactory(consumerFactory());
+    factory.setConsumerFactory(bookConsumerFactory());
     factory.setRecordFilterStrategy(
-              record -> record.value().contains("World"));
+            record -> record.value().getGenre().equals("Thriller"));
     return factory;
   }
 

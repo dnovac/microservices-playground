@@ -1,4 +1,4 @@
-package com.dnovac.customers.model;
+package com.dnovac.customers.web.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

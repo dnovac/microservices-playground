@@ -16,7 +16,7 @@ spring:
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
     topic:
       bootstrap-servers: localhost:9092
-      library-topic-name: libraryTopic
+      book-topic-name: libraryTopic
 
 eureka:
   client:

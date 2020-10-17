@@ -1,5 +1,6 @@
 package com.dnovac.customers.engine;
 
+import com.dnovac.customers.web.domain.Book;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
@@ -20,13 +21,17 @@ public class CustomersConsumer {
    * Furthermore, one consumer can listen for messages from various topics:
    * ex: @KafkaListener(topics = "topic1, topic2", groupId = "foo", containerFactory="filterKafkaListenerContainerFactory")
    *
-   * @param message
+   * @param book
    * @throws IOException
    */
-  @KafkaListener(topics = "libraryTopic", groupId = "group_id")
-  public void consume(String message) throws IOException {
+  @KafkaListener(topics = "libraryTopic", groupId = "group_id", containerFactory = "bookKafkaListenerContainerFactory")
+  public void consume(Book book) throws IOException {
 
-    log.info(String.format("[ Customers-Service ] -> Consumed message -> %s", message));
+    log.info(String.format("[ Customers-Service ] -> Consumed message -> %s, %s, %s, %s",
+            book.getIsbn(),
+            book.getAuthor(),
+            book.getName(),
+            book.getGenre()));
   }
 
 }

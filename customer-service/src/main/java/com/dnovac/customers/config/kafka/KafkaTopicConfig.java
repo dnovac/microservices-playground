@@ -21,8 +21,8 @@ public class KafkaTopicConfig {
   @Value(value = "${spring.kafka.topic.bootstrap-servers}")
   private String bootstrapAddress;
 
-  @Value(value = "${spring.kafka.topic.customers-topic-name}")
-  private String customersTopicName;
+  @Value(value = "${spring.kafka.topic.book-topic-name}")
+  private String bookTopicName;
 
 
   @Bean
@@ -34,7 +34,7 @@ public class KafkaTopicConfig {
 
   @Bean
   public NewTopic topic1() {
-    return new NewTopic(customersTopicName, 1, (short) 1);
+    return new NewTopic(bookTopicName, 1, (short) 1);
   }
 
 
