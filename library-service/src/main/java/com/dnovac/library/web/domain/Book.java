@@ -3,6 +3,8 @@ package com.dnovac.library.web.domain;
 import lombok.Builder;
 import lombok.Data;
 
+import java.io.Serializable;
+
 
 /**
  * @author Dan Novac on 14/10/2020
@@ -10,7 +12,7 @@ import lombok.Data;
  */
 @Data
 @Builder
-public class Book {
+public class Book implements Serializable {
 
   private Long isbn;
   private String name;

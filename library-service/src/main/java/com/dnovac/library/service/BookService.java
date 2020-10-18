@@ -8,8 +8,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 /**
@@ -53,6 +55,15 @@ public class BookService {
             .genre(book.getGenre().name())
             .author(book.getAuthor())
             .name(book.getTitle()).build()).orElse(null);
+  }
+
+  public List<Book> findAll() {
+
+    List<com.dnovac.library.model.Book> allBooks = repository.findAll();
+    return allBooks.stream().map(book -> Book.builder().isbn(Long.valueOf(book.getIsbn()))
+            .genre(book.getGenre().name())
+            .author(book.getAuthor())
+            .name(book.getTitle()).build()).collect(Collectors.toList());
   }
 
 }

@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 
 /**
  * @author Dan Novac on 13/10/2020
@@ -26,6 +28,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class LibraryController {
 
   private final BookService service;
+
+  @GetMapping()
+  public List<Book> findAll() {
+
+    return service.findAll();
+  }
 
   @PostMapping("/publish")
   public void publishBook(@RequestBody Book book) {
