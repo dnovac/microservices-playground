@@ -9,6 +9,7 @@ management:
 spring:
   application:
     name: library-service
+  #Kafka
   kafka:
     producer:
       bootstrap-servers: localhost:9092
@@ -17,6 +18,12 @@ spring:
     topic:
       bootstrap-servers: localhost:9092
       book-topic-name: libraryTopic
+  #Redis Config
+  cache:
+    type: redis
+  redis:
+    host: localhost
+    port: 6379
 
 eureka:
   client:
@@ -24,4 +31,5 @@ eureka:
     fetch-registry: true
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
+
 

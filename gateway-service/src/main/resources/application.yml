@@ -28,5 +28,14 @@ zuul:
     library-service: /library/**
     customer-service: /customers/**
 
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000
+
+
 
 
