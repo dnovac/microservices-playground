@@ -1,7 +1,5 @@
 package com.dnovac.library.config.serializer;
 
-import com.dnovac.library.web.domain.Book;
-
 import java.io.Closeable;
 import java.util.Map;
 

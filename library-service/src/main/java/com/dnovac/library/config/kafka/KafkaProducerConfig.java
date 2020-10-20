@@ -1,7 +1,6 @@
 package com.dnovac.library.config.kafka;
 
-import com.dnovac.library.config.serializer.BookSerializer;
-import com.dnovac.library.web.domain.Book;
+import com.dnovac.library.web.domain.BookDTO;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,9 +26,9 @@ public class KafkaProducerConfig {
   private String bootstrapAddress;
 
   @Bean
-  public ProducerFactory<String, Book> bookProducerFactory() {
+  public ProducerFactory<String, BookDTO> bookProducerFactory() {
 
-    JsonSerializer<Book> bookJsonSerializer = new JsonSerializer<>();
+    JsonSerializer<BookDTO> bookJsonSerializer = new JsonSerializer<>();
     Map<String, Object> configProps = new HashMap<>();
     configProps.put(
             ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
@@ -44,7 +43,7 @@ public class KafkaProducerConfig {
   }
 
   @Bean
-  public KafkaTemplate<String, Book> bookKafkaTemplate() {
+  public KafkaTemplate<String, BookDTO> bookKafkaTemplate() {
 
     return new KafkaTemplate<>(bookProducerFactory());
   }

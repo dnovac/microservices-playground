@@ -12,7 +12,7 @@ import java.io.Serializable;
  */
 @Data
 @Builder
-public class Book implements Serializable {
+public class BookDTO implements Serializable {
 
   private Long isbn;
   private String name;

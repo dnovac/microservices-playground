@@ -1,13 +1,14 @@
 package com.dnovac.library.service;
 
 import com.dnovac.library.engine.LibraryProducer;
+import com.dnovac.library.model.Book;
 import com.dnovac.library.repository.BookRepository;
-import com.dnovac.library.web.domain.Book;
+import com.dnovac.library.web.domain.BookDTO;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -30,40 +31,45 @@ public class BookService {
   /**
    * Publish book to kafka topic and save into redis in-memory database
    *
-   * @param book
+   * @param bookDTO
    */
-  public void publishBook(Book book) {
+  @HystrixCommand(fallbackMethod = "defaultPublishFallback")
+  public void publishBook(BookDTO bookDTO) {
 
     //publish message to topic first
-    producer.publish(book);
+    producer.publish(bookDTO);
 
-    log.info("Saving book with isbn: {} and title: {} in Redis DB", book.getIsbn(), book.getName());
-    com.dnovac.library.model.Book bookEntity = com.dnovac.library.model.Book.builder()
-            .author(book.getAuthor())
-            .genre(com.dnovac.library.model.Book.Genre.PSYCHOLOGICAL)
-            .title(book.getName())
-            .isbn(Optional.ofNullable(book.getIsbn()).map(Object::toString).orElse(UUID.randomUUID().toString()))
+    log.info("Saving book with isbn: {} and title: {} in Redis DB", bookDTO.getIsbn(), bookDTO.getName());
+    Book bookEntity = Book.builder()
+            .author(bookDTO.getAuthor())
+            .genre(Book.Genre.PSYCHOLOGICAL) //todo un-harcode
+            .title(bookDTO.getName())
+            .isbn(Optional.ofNullable(bookDTO.getIsbn()).map(Object::toString).orElse(UUID.randomUUID().toString()))
             .build();
 
     repository.save(bookEntity);
   }
 
-  public Book findOneById(Long id) {
+  public BookDTO findOneById(Long id) {
 
-    Optional<com.dnovac.library.model.Book> bookEntity = repository.findById(id);
-    return bookEntity.map(book -> Book.builder().isbn(Long.valueOf(book.getIsbn()))
+    Optional<Book> bookEntity = repository.findById(id);
+    return bookEntity.map(book -> BookDTO.builder().isbn(Long.valueOf(book.getIsbn()))
             .genre(book.getGenre().name())
             .author(book.getAuthor())
             .name(book.getTitle()).build()).orElse(null);
   }
 
-  public List<Book> findAll() {
+  public List<BookDTO> findAll() {
 
-    List<com.dnovac.library.model.Book> allBooks = repository.findAll();
-    return allBooks.stream().map(book -> Book.builder().isbn(Long.valueOf(book.getIsbn()))
+    List<Book> allBooks = repository.findAll();
+    return allBooks.stream().map(book -> BookDTO.builder().isbn(Long.valueOf(book.getIsbn()))
             .genre(book.getGenre().name())
             .author(book.getAuthor())
             .name(book.getTitle()).build()).collect(Collectors.toList());
+  }
+
+  private void defaultPublishFallback() {
+    log.warn("Something goes wrong! No book published!");
   }
 
 }

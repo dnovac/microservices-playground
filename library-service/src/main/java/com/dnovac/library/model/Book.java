@@ -2,7 +2,6 @@ package com.dnovac.library.model;
 
 import lombok.Builder;
 import lombok.Data;
-import org.aspectj.weaver.GeneratedReferenceTypeDelegate;
 import org.springframework.data.redis.core.RedisHash;
 
 import javax.persistence.GeneratedValue;
@@ -36,4 +35,5 @@ public class Book implements Serializable {
   private String author;
   private String title;
   private Genre genre;
+
 }

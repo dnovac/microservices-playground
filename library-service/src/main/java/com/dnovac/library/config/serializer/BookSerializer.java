@@ -1,6 +1,6 @@
 package com.dnovac.library.config.serializer;
 
-import com.dnovac.library.web.domain.Book;
+import com.dnovac.library.web.domain.BookDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Map;
@@ -10,7 +10,7 @@ import java.util.Map;
  * @author Dan Novac on 17/10/2020
  * @project microservices-playground
  */
-public class BookSerializer implements KafkaSerializer<Book>{
+public class BookSerializer implements KafkaSerializer<BookDTO>{
 
   @Override
   public void configure(Map<String, ?> var1, boolean var2) {
@@ -18,7 +18,7 @@ public class BookSerializer implements KafkaSerializer<Book>{
   }
 
   @Override
-  public byte[] serialize(String var1, Book var2) {
+  public byte[] serialize(String var1, BookDTO var2) {
     byte[] retVal = null;
     ObjectMapper objectMapper = new ObjectMapper();
     try {
